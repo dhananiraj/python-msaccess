@@ -41,7 +41,22 @@ def get_all_data():
 		cursor = cnn.cursor()
 		qd = []
 		# create a query for getting all the category
-		query = r'select * from category'
+		query = f'''
+					SELECT *
+						FROM (
+							SELECT Top 15
+								*
+								FROM
+								(
+									SELECT TOP 45
+									*
+									FROM category
+									ORDER BY id
+								) AS sub1
+							ORDER BY sub1.id DESC
+						) AS clients
+					ORDER BY id
+				'''
 		cursor.execute(query)
 		for row in cursor.fetchall():
 			qd.append(tuple(row))
